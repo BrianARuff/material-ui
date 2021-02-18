@@ -13,9 +13,14 @@ import {
   FormLabel,
 } from '@material-ui/core';
 import { useState } from 'react';
+import { letterSpacing } from '@material-ui/system';
 
 export default function Index() {
   const [formValues, setFormValues] = useState({ customerName: '', loavesType: '', breadType: '' });
+  let { customerName: names, loavesType: loaves, breadType: breads } = formValues;
+  names = names.split(", ");
+  breads = breads.split(", ");
+  loaves = loaves.split(", ");
 
   const [pans, setPans] = useState(0);
   const [rounds, setRounds] = useState(0);
@@ -25,31 +30,39 @@ export default function Index() {
     wholeGrain: true,
     banana: true,
   });
-  const [optimizationReportError, setOptimizationReportError] = useState(false);
-
-  const { loavesType: loaves, breadType: breads } = formValues;
+  const [optimizationReportError, setOptimizationReportError] = useState({
+    error: false,
+    reports: [],
+  });
 
   const handleCheckboxChange = (_event) => {
     setdailyBreadTypes({ ...dailyBreadTypes, [_event.target.name]: _event.target.checked });
   };
 
   const handleSubmit = () => {
-    loaves.split(',').forEach((loaf) => {
+    setPans(0);
+    setRounds(0);
+    setOptimizationReportError({ error: false, reports: [] });
+
+    loaves.forEach((loaf) => {
       if (loaf.replace(' ', '').includes('pan')) {
         setPans((p) => p + 1);
-        loaves.split(',');
       } else if (loaf.replace(' ', '').includes('round')) {
         setRounds((r) => r + 1);
       }
     });
 
-    breads.split(', ').forEach((bread) => {
+    breads.forEach((bread, index) => {
+      let newReports = optimizationReportError.reports;
       if (bread === 'whole grain' && !dailyBreadTypes.wholeGrain) {
-        setOptimizationReportError(true);
+        newReports.push([names[index], loaves[index], bread ])
+        setOptimizationReportError({ ...optimizationReportError, error: true, reports: newReports });
       } else if (bread === 'sourdough' && !dailyBreadTypes.sourdough) {
-        setOptimizationReportError(true);
+        newReports.push([names[index], loaves[index], bread ])
+        setOptimizationReportError({ ...optimizationReportError, error: true, reports: newReports });
       } else if (bread === 'banana' && !dailyBreadTypes.banana) {
-        setOptimizationReportError(true);
+        newReports.push([names[index], loaves[index], bread ])
+        setOptimizationReportError({ ...optimizationReportError, error: true, reports: newReports });
       }
     });
   };
@@ -65,7 +78,7 @@ export default function Index() {
   const clearReport = () => {
     setPans(0);
     setRounds(0);
-    setOptimizationReportError(false);
+    setOptimizationReportError({ ...optimizationReportError, error: false, reports: [] });
   };
 
   return (
@@ -79,11 +92,25 @@ export default function Index() {
         wrap="nowrap"
       >
         <Grid item style={{ width: '50%' }} sx={{ my: 2 }}>
-          {optimizationReportError ? (
-            <h4 style={{ color: 'tomato' }}>
-              Call customers to sort out order error as 1 or more of the requested breads are not
-              being served today.
-            </h4>
+          {optimizationReportError.error ? (
+            <>
+              {
+                <ul>
+                  <h5 style={{fontSize: "1rem"}}>Problem Orders</h5>
+                  {optimizationReportError.reports.map(report => {
+                      return (
+                        <li key={ '_' + Math.random().toString(36).substr(2, 9) }>
+                          <strong>{ report[0] }-{ report[1] }-{ report[2] }</strong>
+                          <p style={{ color: 'tomato' }}>
+                          Call { report[0] } to sort out their order as you are not serving { report[2] } bread today.
+                          </p>
+                        </li>
+                      )
+                    })
+                  }
+                </ul>  
+              }
+            </>
           ) : (
             <ul style={{ flex: '0 0 1fr', margin: '0', padding: '0' }}>
               <h4>Report</h4>
