@@ -21,16 +21,39 @@ import { useState } from 'react';
 import { letterSpacing } from '@material-ui/system';
 
 export default function Index() {
-  const [formValues, setFormValues] = useState({ customerName: '', loavesType: '', breadType: '' });
-  let { customerName: names, loavesType: loaves, breadType: breads } = formValues;
-  names = names.split(', ');
-  breads = breads.split(', ');
-  loaves = loaves.split(', ');
+  type FormValues = {
+    customerName: '';
+    loavesType: '';
+    breadType: '';
+  };
 
-  const [pans, setPans] = useState(0);
-  const [rounds, setRounds] = useState(0);
+  const [formValues, setFormValues] = useState<FormValues>({
+    customerName: '',
+    loavesType: '',
+    breadType: '',
+  });
 
-  const [dailyBreadTypes, setdailyBreadTypes] = useState({
+  const names = formValues.customerName.split(', ');
+  const breads = formValues.breadType.split(', ');
+  const loaves = formValues.loavesType.split(', ');
+
+  type Pans = {
+    pans: number;
+  };
+  type Rounds = {
+    rounds: number;
+  };
+
+  const [pans, setPans] = useState<Pans | number>(0);
+  const [rounds, setRounds] = useState<Rounds | number>(0);
+
+  type DailyBreads = {
+    sourdough: boolean;
+    wholeGrain: boolean;
+    banana: boolean;
+  };
+
+  const [dailyBreadTypes, setdailyBreadTypes] = useState<DailyBreads>({
     sourdough: true,
     wholeGrain: true,
     banana: true,
@@ -131,17 +154,17 @@ export default function Index() {
             <>
               <List style={{ flex: '0 0 1fr', margin: '0', padding: '0' }}>
                 <ListSubheader>Report</ListSubheader>
-                <ListItem primary="spam">
+                <ListItem>
                   <ListItemText>{rounds + ' '}customers want round loaves for today</ListItemText>
                 </ListItem>
-                <ListItem primary="spam">
+                <ListItem>
                   <ListItemText>{pans + ' '} customers want pans loaves for today</ListItemText>
                 </ListItem>
               </List>
               <List>
                 {pans > rounds ? (
                   <ListItem>
-                    <ListeItemText>Bake {pans + rounds} pan loaves today</ListeItemText>
+                    <ListItemText>Bake {pans + rounds} pan loaves today</ListItemText>
                   </ListItem>
                 ) : rounds > pans ? (
                   <ListItem>
