@@ -30,9 +30,11 @@ export default function Index() {
     wholeGrain: true,
     banana: true,
   });
-  const [optimizationReportError, setOptimizationReportError] = useState({
+  const [optimizationReport, setoptimizationReport] = useState({
     error: false,
     reports: [],
+    pans: false,
+    rounds: false
   });
 
   const handleCheckboxChange = (_event) => {
@@ -42,7 +44,7 @@ export default function Index() {
   const handleSubmit = () => {
     setPans(0);
     setRounds(0);
-    setOptimizationReportError({ error: false, reports: [] });
+    setoptimizationReport({ error: false, reports: [] });
 
     loaves.forEach((loaf) => {
       if (loaf.replace(' ', '').includes('pan')) {
@@ -53,22 +55,30 @@ export default function Index() {
     });
 
     breads.forEach((bread, index) => {
-      let newReports = optimizationReportError.reports;
+      let newReports = optimizationReport.reports;
       if (bread === 'whole grain' && !dailyBreadTypes.wholeGrain) {
         newReports.push([names[index], loaves[index], bread ])
-        setOptimizationReportError({ ...optimizationReportError, error: true, reports: newReports });
+        setoptimizationReport({ ...optimizationReport, error: true, reports: newReports });
       } else if (bread === 'sourdough' && !dailyBreadTypes.sourdough) {
         newReports.push([names[index], loaves[index], bread ])
-        setOptimizationReportError({ ...optimizationReportError, error: true, reports: newReports });
+        setoptimizationReport({ ...optimizationReport, error: true, reports: newReports });
       } else if (bread === 'banana' && !dailyBreadTypes.banana) {
         newReports.push([names[index], loaves[index], bread ])
-        setOptimizationReportError({ ...optimizationReportError, error: true, reports: newReports });
+        setoptimizationReport({ ...optimizationReport, error: true, reports: newReports });
       }
     });
+
+    if (pans > rounds) {
+      setoptimizationReport({...optimizationReport, pans: true, rounds: false})
+    } else if (rounds > pans) {
+      setoptimizationReport({...optimizationReport, rounds: true, pans: false})
+    } else {
+      setoptimizationReport({...optimizationReport, error: true})
+    }
   };
 
-  const handleFormInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleFormInputChange = (_event) => {
+    const { name, value } = _event.target;
     setFormValues({
       ...formValues,
       [name]: value,
@@ -78,7 +88,7 @@ export default function Index() {
   const clearReport = () => {
     setPans(0);
     setRounds(0);
-    setOptimizationReportError({ ...optimizationReportError, error: false, reports: [] });
+    setoptimizationReport({ ...optimizationReport, error: false, reports: [], pan: false, round: false });
   };
 
   return (
@@ -92,12 +102,12 @@ export default function Index() {
         wrap="nowrap"
       >
         <Grid item style={{ width: '50%' }} sx={{ my: 2 }}>
-          {optimizationReportError.error ? (
+          {optimizationReport.error ? (
             <>
               {
                 <ul>
                   <h5 style={{fontSize: "1rem"}}>Problem Orders</h5>
-                  {optimizationReportError.reports.map(report => {
+                  {optimizationReport.reports.map(report => {
                       return (
                         <li key={ '_' + Math.random().toString(36).substr(2, 9) }>
                           <strong>{ report[0] }-{ report[1] }-{ report[2] }</strong>
