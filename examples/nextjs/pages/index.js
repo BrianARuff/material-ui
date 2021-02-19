@@ -137,14 +137,11 @@ export default function Index() {
                 </li>
               </ul>
               <ul>
-                {optimizationReport.pans ? (
-                  <li>Bake {pans} pan loaves</li>
-                ) : optimizationReport.rounds ? (
-                  <li>Bake {rounds} round loaves</li>
-                ) : null}
-              </ul>
-              <ul>
-                {pans === rounds && pans !== 0 && rounds !== 0 ? (
+                {pans > rounds ? (
+                  <li>Bake {pans + rounds} pan loaves today</li>
+                ) : rounds > pans ? (
+                  <li>Bake {rounds + pans} round loaves today</li>
+                ) : pans === rounds && pans !== 0 && rounds !== 0 ? (
                   <li style={{ color: 'tomato' }}>
                     An equal number of customers want pan and round loaves. You will have to call
                     each customer and figure out a custom solution
