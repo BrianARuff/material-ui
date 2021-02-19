@@ -11,6 +11,11 @@ import {
   Checkbox,
   FormGroup,
   FormLabel,
+  Alert,
+  List,
+  ListItem,
+  ListSubheader,
+  ListItemText,
 } from '@material-ui/core';
 import { useState } from 'react';
 import { letterSpacing } from '@material-ui/system';
@@ -42,9 +47,7 @@ export default function Index() {
   };
 
   const handleSubmit = () => {
-    setPans(0);
-    setRounds(0);
-    setoptimizationReport({ error: false, reports: [] });
+    clearReport();
 
     loaves.forEach((loaf) => {
       if (loaf.replace(' ', '').includes('pan')) {
@@ -109,45 +112,48 @@ export default function Index() {
       >
         <Grid item style={{ width: '50%' }} sx={{ my: 2 }}>
           {optimizationReport.error ? (
-            <ul>
-              <h4 style={{ fontSize: '1rem' }}>Problem Orders</h4>
+            <List>
+              <ListSubheader>Problem Orders</ListSubheader>
               {optimizationReport.reports.map((report) => {
                 return (
-                  <li key={'_' + Math.random().toString(36).substr(2, 9)}>
-                    <strong>
-                      {report[0]}-{report[1]}-{report[2]}
-                    </strong>
-                    <p style={{ color: 'tomato' }}>
-                      Call {report[0]} to sort out their order as you are not serving {report[2]}{' '}
-                      bread today.
-                    </p>
-                  </li>
+                  <ListItem key={'_' + Math.random().toString(36).substr(2, 9)}>
+                    <ListItemText>
+                      <Alert severity="error">
+                        Call {report[0]} to sort out their order as you are not serving {report[2]}{' '}
+                        bread today.
+                      </Alert>
+                    </ListItemText>
+                  </ListItem>
                 );
               })}
-            </ul>
+            </List>
           ) : (
             <>
-              <ul style={{ flex: '0 0 1fr', margin: '0', padding: '0' }}>
-                <h4>Report</h4>
-                <li>
-                  <strong>{rounds}</strong> customers want rounds for today
-                </li>
-                <li>
-                  <strong>{pans}</strong> customers want pans for today
-                </li>
-              </ul>
-              <ul>
+              <List style={{ flex: '0 0 1fr', margin: '0', padding: '0' }}>
+                <ListSubheader>Report</ListSubheader>
+                <ListItem primary="spam">
+                  <ListItemText>{rounds + ' '}customers want round loaves for today</ListItemText>
+                </ListItem>
+                <ListItem primary="spam">
+                  <ListItemText>{pans + ' '} customers want pans loaves for today</ListItemText>
+                </ListItem>
+              </List>
+              <List>
                 {pans > rounds ? (
-                  <li>Bake {pans + rounds} pan loaves today</li>
+                  <ListItem>
+                    <ListeItemText>Bake {pans + rounds} pan loaves today</ListeItemText>
+                  </ListItem>
                 ) : rounds > pans ? (
-                  <li>Bake {rounds + pans} round loaves today</li>
+                  <ListItem>
+                    <ListItemText>Bake {rounds + pans} round loaves today</ListItemText>
+                  </ListItem>
                 ) : pans === rounds && pans !== 0 && rounds !== 0 ? (
-                  <li style={{ color: 'tomato' }}>
+                  <Alert severity="error">
                     An equal number of customers want pan and round loaves. You will have to call
                     each customer and figure out a custom solution
-                  </li>
+                  </Alert>
                 ) : null}
-              </ul>
+              </List>
             </>
           )}
         </Grid>
