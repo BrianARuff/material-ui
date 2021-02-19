@@ -18,9 +18,9 @@ import { letterSpacing } from '@material-ui/system';
 export default function Index() {
   const [formValues, setFormValues] = useState({ customerName: '', loavesType: '', breadType: '' });
   let { customerName: names, loavesType: loaves, breadType: breads } = formValues;
-  names = names.split(", ");
-  breads = breads.split(", ");
-  loaves = loaves.split(", ");
+  names = names.split(', ');
+  breads = breads.split(', ');
+  loaves = loaves.split(', ');
 
   const [pans, setPans] = useState(0);
   const [rounds, setRounds] = useState(0);
@@ -34,7 +34,7 @@ export default function Index() {
     error: false,
     reports: [],
     pans: false,
-    rounds: false
+    rounds: false,
   });
 
   const handleCheckboxChange = (_event) => {
@@ -57,23 +57,23 @@ export default function Index() {
     breads.forEach((bread, index) => {
       let newReports = optimizationReport.reports;
       if (bread === 'whole grain' && !dailyBreadTypes.wholeGrain) {
-        newReports.push([names[index], loaves[index], bread ])
+        newReports.push([names[index], loaves[index], bread]);
         setoptimizationReport({ ...optimizationReport, error: true, reports: newReports });
       } else if (bread === 'sourdough' && !dailyBreadTypes.sourdough) {
-        newReports.push([names[index], loaves[index], bread ])
+        newReports.push([names[index], loaves[index], bread]);
         setoptimizationReport({ ...optimizationReport, error: true, reports: newReports });
       } else if (bread === 'banana' && !dailyBreadTypes.banana) {
-        newReports.push([names[index], loaves[index], bread ])
+        newReports.push([names[index], loaves[index], bread]);
         setoptimizationReport({ ...optimizationReport, error: true, reports: newReports });
       }
     });
 
     if (pans > rounds) {
-      setoptimizationReport({...optimizationReport, pans: true, rounds: false})
+      setoptimizationReport({ ...optimizationReport, pans: true, rounds: false });
     } else if (rounds > pans) {
-      setoptimizationReport({...optimizationReport, rounds: true, pans: false})
-    } else {
-      setoptimizationReport({...optimizationReport, error: true})
+      setoptimizationReport({ ...optimizationReport, rounds: true, pans: false });
+    } else if (pans === rounds && pans !== 0 && rounds !== 0) {
+      setoptimizationReport({ ...optimizationReport, pans: false, rounds: false });
     }
   };
 
@@ -88,7 +88,13 @@ export default function Index() {
   const clearReport = () => {
     setPans(0);
     setRounds(0);
-    setoptimizationReport({ ...optimizationReport, error: false, reports: [], pan: false, round: false });
+    setoptimizationReport({
+      ...optimizationReport,
+      error: false,
+      reports: [],
+      pans: false,
+      rounds: false,
+    });
   };
 
   return (
@@ -103,34 +109,49 @@ export default function Index() {
       >
         <Grid item style={{ width: '50%' }} sx={{ my: 2 }}>
           {optimizationReport.error ? (
-            <>
-              {
-                <ul>
-                  <h5 style={{fontSize: "1rem"}}>Problem Orders</h5>
-                  {optimizationReport.reports.map(report => {
-                      return (
-                        <li key={ '_' + Math.random().toString(36).substr(2, 9) }>
-                          <strong>{ report[0] }-{ report[1] }-{ report[2] }</strong>
-                          <p style={{ color: 'tomato' }}>
-                          Call { report[0] } to sort out their order as you are not serving { report[2] } bread today.
-                          </p>
-                        </li>
-                      )
-                    })
-                  }
-                </ul>  
-              }
-            </>
-          ) : (
-            <ul style={{ flex: '0 0 1fr', margin: '0', padding: '0' }}>
-              <h4>Report</h4>
-              <li>
-                Make <strong>{rounds}</strong> rounds for today
-              </li>
-              <li>
-                Make <strong>{pans}</strong> pans for today
-              </li>
+            <ul>
+              <h4 style={{ fontSize: '1rem' }}>Problem Orders</h4>
+              {optimizationReport.reports.map((report) => {
+                return (
+                  <li key={'_' + Math.random().toString(36).substr(2, 9)}>
+                    <strong>
+                      {report[0]}-{report[1]}-{report[2]}
+                    </strong>
+                    <p style={{ color: 'tomato' }}>
+                      Call {report[0]} to sort out their order as you are not serving {report[2]}{' '}
+                      bread today.
+                    </p>
+                  </li>
+                );
+              })}
             </ul>
+          ) : (
+            <>
+              <ul style={{ flex: '0 0 1fr', margin: '0', padding: '0' }}>
+                <h4>Report</h4>
+                <li>
+                  <strong>{rounds}</strong> customers want rounds for today
+                </li>
+                <li>
+                  <strong>{pans}</strong> customers want pans for today
+                </li>
+              </ul>
+              <ul>
+                {optimizationReport.pans ? (
+                  <li>Bake {pans} pan loaves</li>
+                ) : optimizationReport.rounds ? (
+                  <li>Bake {rounds} round loaves</li>
+                ) : null}
+              </ul>
+              <ul>
+                {pans === rounds && pans !== 0 && rounds !== 0 ? (
+                  <li style={{ color: 'tomato' }}>
+                    An equal number of customers want pan and round loaves. You will have to call
+                    each customer and figure out a custom solution
+                  </li>
+                ) : null}
+              </ul>
+            </>
           )}
         </Grid>
         <Grid item style={{ width: '50%' }} sx={{ my: 2 }}>
