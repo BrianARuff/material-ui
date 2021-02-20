@@ -17,112 +17,20 @@ import {
   ListSubheader,
   ListItemText,
 } from '@material-ui/core';
-import { useState } from 'react';
-import { letterSpacing } from '@material-ui/system';
+import useSetState from '../components/useSetState';
 
 export default function Index() {
-  type FormValues = {
-    customerName: '';
-    loavesType: '';
-    breadType: '';
-  };
-
-  const [formValues, setFormValues] = useState<FormValues>({
-    customerName: '',
-    loavesType: '',
-    breadType: '',
-  });
-
-  const names = formValues.customerName.split(', ');
-  const breads = formValues.breadType.split(', ');
-  const loaves = formValues.loavesType.split(', ');
-
-  type Pans = {
-    pans: number;
-  };
-  type Rounds = {
-    rounds: number;
-  };
-
-  const [pans, setPans] = useState<Pans | number>(0);
-  const [rounds, setRounds] = useState<Rounds | number>(0);
-
-  type DailyBreads = {
-    sourdough: boolean;
-    wholeGrain: boolean;
-    banana: boolean;
-  };
-
-  const [dailyBreadTypes, setdailyBreadTypes] = useState<DailyBreads>({
-    sourdough: true,
-    wholeGrain: true,
-    banana: true,
-  });
-  const [optimizationReport, setoptimizationReport] = useState({
-    error: false,
-    reports: [],
-    pans: false,
-    rounds: false,
-  });
-
-  const handleCheckboxChange = (_event) => {
-    setdailyBreadTypes({ ...dailyBreadTypes, [_event.target.name]: _event.target.checked });
-  };
-
-  const handleSubmit = () => {
-    clearReport();
-
-    loaves.forEach((loaf) => {
-      if (loaf.replace(' ', '').includes('pan')) {
-        setPans((p) => p + 1);
-      } else if (loaf.replace(' ', '').includes('round')) {
-        setRounds((r) => r + 1);
-      }
-    });
-
-    breads.forEach((bread, index) => {
-      let newReports = optimizationReport.reports;
-      if (bread === 'whole grain' && !dailyBreadTypes.wholeGrain) {
-        newReports.push([names[index], loaves[index], bread]);
-        setoptimizationReport({ ...optimizationReport, error: true, reports: newReports });
-      } else if (bread === 'sourdough' && !dailyBreadTypes.sourdough) {
-        newReports.push([names[index], loaves[index], bread]);
-        setoptimizationReport({ ...optimizationReport, error: true, reports: newReports });
-      } else if (bread === 'banana' && !dailyBreadTypes.banana) {
-        newReports.push([names[index], loaves[index], bread]);
-        setoptimizationReport({ ...optimizationReport, error: true, reports: newReports });
-      }
-    });
-
-    if (pans > rounds) {
-      setoptimizationReport({ ...optimizationReport, pans: true, rounds: false });
-    } else if (rounds > pans) {
-      setoptimizationReport({ ...optimizationReport, rounds: true, pans: false });
-    } else if (pans === rounds && pans !== 0 && rounds !== 0) {
-      setoptimizationReport({ ...optimizationReport, pans: false, rounds: false });
-    }
-  };
-
-  const handleFormInputChange = (_event) => {
-    const { name, value } = _event.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  };
-
-  const clearReport = () => {
-    setPans(0);
-    setRounds(0);
-    setoptimizationReport({
-      ...optimizationReport,
-      error: false,
-      reports: [],
-      pans: false,
-      rounds: false,
-    });
-  };
-
+  const {
+    optimizationReport,
+    rounds,
+    pans,
+    dailyBreadTypes,
+    formValues,
+    handleCheckboxChange,
+    handleFormInputChange,
+    handleSubmit,
+    clearReport,
+  } = useSetState();
   return (
     <Container>
       <Grid
