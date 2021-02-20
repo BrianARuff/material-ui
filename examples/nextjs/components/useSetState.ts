@@ -47,7 +47,7 @@ const useSetState = () => {
     rounds: false,
   }));
 
-  const handleFormInputChange = (_event) => {
+  const handleFormInputChange = (_event: React.BaseSyntheticEvent): void => {
     setFormValues({
       ...formValues,
       [_event.target.name]: _event.target.value
