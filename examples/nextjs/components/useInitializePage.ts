@@ -1,7 +1,37 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-const useSetState = () => {
+const useInitializePage = () => {
+
+  type Theme = {
+    dark: boolean,
+    light: boolean,
+    darkTheme: {
+      backgroundColor: string,
+      color: string
+    },
+    lightTheme: {
+      backgroundColor: string,
+      color: string
+    }
+  }
+
+  const [theme, setTheme] = useState<Theme>({
+    dark: false,
+    light: true,
+    darkTheme: {
+      backgroundColor: "#115293",
+      color: "#fff"
+    },
+    lightTheme: {
+      backgroundColor: "#f8f8f1",
+      color: "#000"
+    }
+  })
+
+  const handleSetTheme = () => {
+    setTheme({...theme, dark: !theme.dark, light: !theme.light})
+  }
 
   type FormValues = {
     customerName: '';
@@ -105,6 +135,7 @@ const useSetState = () => {
   };
 
   return {
+    theme,
     optimizationReport,
     dailyBreadTypes,
     names,
@@ -113,6 +144,7 @@ const useSetState = () => {
     pans,
     rounds,
     formValues,
+    handleSetTheme,
     setFormValues,
     handleCheckboxChange,
     handleFormInputChange,
@@ -121,4 +153,4 @@ const useSetState = () => {
   }
 };
 
-export default useSetState
+export default useInitializePage

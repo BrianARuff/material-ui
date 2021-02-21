@@ -16,34 +16,68 @@ import {
   ListItem,
   ListSubheader,
 } from '@material-ui/core';
-import useSetState from '../components/useSetState';
+import useInitializePage from '../components/useInitializePage';
 
 export default function Index() {
   const {
+    theme,
     optimizationReport,
     rounds,
     pans,
     dailyBreadTypes,
     formValues,
+    handleSetTheme,
     handleCheckboxChange,
     handleFormInputChange,
     handleSubmit,
     clearReport,
-  } = useSetState();
+  } = useInitializePage();
   return (
-    <Container>
+    <Container
+      style={{
+        flex: '0 0 100%',
+        minHeight: '100vh',
+        color: theme.dark ? theme.darkTheme.color : theme.lightTheme.color,
+        backgroundColor: theme.dark
+          ? theme.darkTheme.backgroundColor
+          : theme.lightTheme.backgroundColor,
+      }}
+    >
       <Grid
-        style={{ height: '100vh' }}
         container
+        style={{ height: 'fit-content' }}
+        sx={{ py: 4 }}
         direction="column"
-        alignItems="center"
-        justifyContent="center"
+        alignItems="flex-start"
+        justifyContent="flex-start"
         wrap="nowrap"
       >
+        <Button
+          style={{
+            color: theme.dark ? theme.lightTheme.color : theme.darkTheme.color,
+            backgroundColor: theme.dark
+              ? theme.lightTheme.backgroundColor
+              : theme.darkTheme.backgroundColor,
+          }}
+          onClick={handleSetTheme}
+          variant="outlined"
+        >
+          {theme.dark ? 'Set Theme to Light Mode' : 'Set Theme to Dark Mode'}
+        </Button>
         <Grid item style={{ width: '100%' }} sx={{ my: 2 }}>
           {optimizationReport.error ? (
             <List>
-              <ListSubheader>Problem Orders</ListSubheader>
+              <ListSubheader
+                style={{
+                  flex: '0 0 100%',
+                  color: theme.dark ? theme.darkTheme.color : theme.lightTheme.color,
+                  backgroundColor: theme.dark
+                    ? theme.darkTheme.backgroundColor
+                    : theme.lightTheme.backgroundColor,
+                }}
+              >
+                Problem Orders
+              </ListSubheader>
               {optimizationReport.reports.map((report) => {
                 return (
                   <ListItem key={'_' + Math.random().toString(36).substr(2, 9)}>
@@ -76,7 +110,16 @@ export default function Index() {
         </Grid>
         <Grid item style={{ width: '100%' }} sx={{ my: 2 }}>
           <FormControl>
-            <FormLabel>Select Daily Breads</FormLabel>
+            <FormLabel
+              style={{
+                color: theme.dark ? theme.darkTheme.color : theme.lightTheme.color,
+                backgroundColor: theme.dark
+                  ? theme.darkTheme.backgroundColor
+                  : theme.lightTheme.backgroundColor,
+              }}
+            >
+              Select Daily Breads
+            </FormLabel>
             <FormGroup>
               <FormControlLabel
                 control={
@@ -109,13 +152,42 @@ export default function Index() {
                 label="Banana Bread"
               />
             </FormGroup>
-            <FormHelperText>
+            <FormHelperText
+              style={{
+                flex: '0 0 100%',
+                color: theme.dark ? theme.darkTheme.color : theme.lightTheme.color,
+                backgroundColor: theme.dark
+                  ? theme.darkTheme.backgroundColor
+                  : theme.lightTheme.backgroundColor,
+              }}
+            >
               Select the breads you intend on making for today&apos;s operations.
             </FormHelperText>
           </FormControl>
         </Grid>
-        <Grid style={{ width: '100%' }} sx={{ my: 2 }} item>
-          <Typography variant="h3">Customer Information</Typography>
+        <Grid
+          item
+          style={{
+            width: '100%',
+            backgroundColor: theme.dark
+              ? theme.darkTheme.backgroundColor
+              : theme.lightTheme.backgroundColor,
+          }}
+          sx={{ my: 2 }}
+        >
+          <ListSubheader>
+            <Typography
+              style={{
+                color: theme.dark ? theme.darkTheme.color : theme.lightTheme.color,
+                backgroundColor: theme.dark
+                  ? theme.darkTheme.backgroundColor
+                  : theme.lightTheme.backgroundColor,
+              }}
+              variant="h3"
+            >
+              Customer Information
+            </Typography>
+          </ListSubheader>
           <FormControl>
             <Grid
               style={{ display: 'flex', flexWrap: 'wrap', width: 'contain-content' }}
@@ -123,7 +195,11 @@ export default function Index() {
               item
             >
               <TextField
-                style={{ flex: '0 0 100%' }}
+                style={{
+                  flex: '0 0 100%',
+                  color: theme.dark ? theme.darkTheme.color : theme.lightTheme.color,
+                  backgroundColor: theme.lightTheme.backgroundColor,
+                }}
                 sx={{ my: 1 }}
                 id="customer-name"
                 name="customerName"
@@ -133,7 +209,11 @@ export default function Index() {
                 onChange={handleFormInputChange}
               />
               <TextField
-                style={{ flex: '0 0 100%' }}
+                style={{
+                  flex: '0 0 100%',
+                  color: theme.dark ? theme.darkTheme.color : theme.lightTheme.color,
+                  backgroundColor: theme.lightTheme.backgroundColor,
+                }}
                 sx={{ my: 1 }}
                 id="customer-loaves"
                 name="loavesType"
@@ -143,7 +223,11 @@ export default function Index() {
                 onChange={handleFormInputChange}
               />
               <TextField
-                style={{ flex: '0 0 100%' }}
+                style={{
+                  flex: '0 0 100%',
+                  color: theme.dark ? theme.darkTheme.color : theme.lightTheme.color,
+                  backgroundColor: theme.lightTheme.backgroundColor,
+                }}
                 sx={{ my: 1 }}
                 id="customer-bread"
                 name="breadType"
@@ -152,18 +236,36 @@ export default function Index() {
                 value={formValues.breadType}
                 onChange={handleFormInputChange}
               />
-              <FormHelperText>
+              <FormHelperText
+                style={{
+                  flex: '0 0 100%',
+                  color: theme.dark ? theme.darkTheme.color : theme.lightTheme.color,
+                  backgroundColor: theme.dark
+                    ? theme.darkTheme.backgroundColor
+                    : theme.lightTheme.backgroundColor,
+                }}
+              >
                 Valid Values include: <strong>sourdough</strong>, <strong>whole grain</strong>, and{' '}
                 <strong>banana</strong> for types of loaves
               </FormHelperText>
             </Grid>
-            <FormHelperText>Enter data as a comma separated list</FormHelperText>
+            <FormHelperText
+              style={{
+                flex: '0 0 100%',
+                color: theme.dark ? theme.darkTheme.color : theme.lightTheme.color,
+                backgroundColor: theme.dark
+                  ? theme.darkTheme.backgroundColor
+                  : theme.lightTheme.backgroundColor,
+              }}
+            >
+              Enter data as a comma separated list
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Button
           onClick={handleSubmit}
           style={{ width: '100%', height: '50px' }}
-          sx={{ my: 4 }}
+          sx={{ my: 2 }}
           variant="contained"
           color="primary"
           type="submit"
@@ -173,7 +275,7 @@ export default function Index() {
         <Button
           onClick={clearReport}
           style={{ width: '100%', height: '50px' }}
-          sx={{ my: 1 }}
+          sx={{ my: 0 }}
           variant="contained"
           color="secondary"
           type="submit"
