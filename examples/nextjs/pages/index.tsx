@@ -15,7 +15,6 @@ import {
   List,
   ListItem,
   ListSubheader,
-  ListItemText,
 } from '@material-ui/core';
 import useSetState from '../components/useSetState';
 
@@ -41,42 +40,29 @@ export default function Index() {
         justifyContent="center"
         wrap="nowrap"
       >
-        <Grid item style={{ width: '50%' }} sx={{ my: 2 }}>
+        <Grid item style={{ width: '100%' }} sx={{ my: 2 }}>
           {optimizationReport.error ? (
             <List>
               <ListSubheader>Problem Orders</ListSubheader>
               {optimizationReport.reports.map((report) => {
                 return (
                   <ListItem key={'_' + Math.random().toString(36).substr(2, 9)}>
-                    <ListItemText>
-                      <Alert severity="error">
-                        Call {report[0]} to sort out their order as you are not serving {report[2]}{' '}
-                        bread today.
-                      </Alert>
-                    </ListItemText>
+                    <Alert severity="error">
+                      Call {report[0]} to sort out their order as you are not serving {report[2]}{' '}
+                      bread today.
+                    </Alert>
                   </ListItem>
                 );
               })}
             </List>
           ) : (
             <>
-              <List style={{ flex: '0 0 1fr', margin: '0', padding: '0' }}>
-                <ListSubheader>Report</ListSubheader>
-                <ListItem>
-                  <ListItemText>{rounds + ' '}customers want round loaves for today</ListItemText>
-                </ListItem>
-                <ListItem>
-                  <ListItemText>{pans + ' '} customers want pans loaves for today</ListItemText>
-                </ListItem>
-              </List>
               <List>
-                {pans > rounds ? (
+                {pans || rounds ? (
                   <ListItem>
-                    <ListItemText>Bake {pans + rounds} pan loaves today</ListItemText>
-                  </ListItem>
-                ) : rounds > pans ? (
-                  <ListItem>
-                    <ListItemText>Bake {rounds + pans} round loaves today</ListItemText>
+                    <Alert severity="success">
+                      Bake {pans} pan loaves and {rounds} round loaves today
+                    </Alert>
                   </ListItem>
                 ) : pans === rounds && pans !== 0 && rounds !== 0 ? (
                   <Alert severity="error">
@@ -88,9 +74,9 @@ export default function Index() {
             </>
           )}
         </Grid>
-        <Grid item style={{ width: '50%' }} sx={{ my: 2 }}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Select Daily Breads</FormLabel>
+        <Grid item style={{ width: '100%' }} sx={{ my: 2 }}>
+          <FormControl>
+            <FormLabel>Select Daily Breads</FormLabel>
             <FormGroup>
               <FormControlLabel
                 control={
@@ -128,7 +114,7 @@ export default function Index() {
             </FormHelperText>
           </FormControl>
         </Grid>
-        <Grid style={{ width: '50%' }} sx={{ my: 2 }} item>
+        <Grid style={{ width: '100%' }} sx={{ my: 2 }} item>
           <Typography variant="h3">Customer Information</Typography>
           <FormControl>
             <Grid
@@ -176,7 +162,7 @@ export default function Index() {
         </Grid>
         <Button
           onClick={handleSubmit}
-          style={{ width: '50%', height: '50px' }}
+          style={{ width: '100%', height: '50px' }}
           sx={{ my: 4 }}
           variant="contained"
           color="primary"
@@ -186,7 +172,7 @@ export default function Index() {
         </Button>
         <Button
           onClick={clearReport}
-          style={{ width: '50%', height: '50px' }}
+          style={{ width: '100%', height: '50px' }}
           sx={{ my: 1 }}
           variant="contained"
           color="secondary"
