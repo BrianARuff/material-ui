@@ -4,6 +4,7 @@ import {
   Typography,
   FormControl,
   Button,
+  ButtonGroup,
   Grid,
   TextField,
   FormHelperText,
@@ -18,7 +19,7 @@ import {
 } from '@material-ui/core';
 import useInitializePage from '../components/useInitializePage';
 
-export default function Index() {
+export default function Index(): React.FC {
   const {
     theme,
     optimizationReport,
