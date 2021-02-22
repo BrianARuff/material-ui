@@ -23,8 +23,12 @@ export default function MyApp(props) {
   return (
     <CacheProvider value={cache}>
       <Head>
-        <title>My page</title>
+        <title>Ocelot Frontend Developer Challenge</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta
+          name="description"
+          content="This is my solution for the coding interview for Ocelot, a company that I applied to."
+        />
       </Head>
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}

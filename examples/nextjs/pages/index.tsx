@@ -16,10 +16,28 @@ import {
   List,
   ListItem,
   ListSubheader,
+  Card,
+  CardActionArea,
+  CardContent,
+  makeStyles,
 } from '@material-ui/core';
 import useInitializePage from '../components/useInitializePage';
+import Image from 'next/image';
 
-export default function Index(): React.FC {
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 345,
+    marginTop: 40,
+    marginRight: 20,
+    padding: 20,
+  },
+  media: {
+    height: 140,
+  },
+});
+
+const Index: React.FC = () => {
+  const classes = useStyles();
   const {
     theme,
     optimizationReport,
@@ -263,27 +281,55 @@ export default function Index(): React.FC {
             </FormHelperText>
           </FormControl>
         </Grid>
-        <Button
-          onClick={handleSubmit}
-          style={{ width: '100%', height: '50px' }}
-          sx={{ my: 2 }}
-          variant="contained"
-          color="primary"
-          type="submit"
-        >
-          Add Orders
-        </Button>
-        <Button
-          onClick={clearReport}
-          style={{ width: '100%', height: '50px' }}
-          sx={{ my: 0 }}
-          variant="contained"
-          color="secondary"
-          type="submit"
-        >
-          Clear Orders
-        </Button>
+        <ButtonGroup color="primary">
+          <Button
+            onClick={handleSubmit}
+            style={{ width: 'fit-content', height: '3rem' }}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={optimizationReport.error}
+          >
+            Add Orders
+          </Button>
+          <Button
+            onClick={clearReport}
+            style={{ width: 'fit-content', height: '3rem', marginLeft: '1rem' }}
+            variant="contained"
+            color="secondary"
+            type="submit"
+          >
+            Clear Orders
+          </Button>
+        </ButtonGroup>
+        <Grid container>
+          {optimizationReport.error === false &&
+            optimizationReport.reports.map(([customerName, loafType, breadType]) => {
+              return (
+                <Card key={'_' + Math.random().toString(36).substr(2, 9)} className={classes.root}>
+                  <CardActionArea>
+                    <Image
+                      src="/images/bread.png"
+                      alt="Picture of bread with smiley face on it"
+                      width={345}
+                      height={140}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {customerName}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        {customerName} has ordered {breadType} bread {loafType} loaf.
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              );
+            })}
+        </Grid>
       </Grid>
     </Container>
   );
-}
+};
+
+export default Index;

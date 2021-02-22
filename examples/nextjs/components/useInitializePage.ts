@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 
+
 const useInitializePage = () => {
 
   type Theme = {
@@ -89,13 +90,20 @@ const useInitializePage = () => {
   };
 
   const handleSubmit = (): void => {
-    loaves.forEach((loaf: string) => {
-      if (loaf.replace(' ', '').includes('pan')) {
-        setPans((p) => p + 1);
-      } else if (loaf.replace(' ', '').includes('round')) {
-        setRounds((r) => r + 1);
-      }
-    });
+    let newReports = [];
+    if (optimizationReport.error === false) {
+      loaves.forEach((loaf: string, index) => {
+        if (loaf.replace(' ', '').includes('pan') && !optimizationReport.error) {
+          setPans((p) => p + 1);
+          newReports.push([names[index], loaf, breads[index]]);
+          setoptimizationReport({...optimizationReport, reports: newReports})
+        } else if (loaf.replace(' ', '').includes('round') && !optimizationReport.error) {
+          setRounds((r) => r + 1);
+          newReports.push([names[index], loaf, breads[index]]);
+          setoptimizationReport({...optimizationReport, reports: newReports})
+        }
+      });
+    }
 
     breads.forEach((bread: string, index: number) => {
       let newReports = optimizationReport.reports;
@@ -110,14 +118,6 @@ const useInitializePage = () => {
         setoptimizationReport(() => ({ ...optimizationReport, error: true, reports: newReports }));
       }
     });
-
-    if (pans > rounds) {
-      setoptimizationReport(() => ({ ...optimizationReport, pans: true, rounds: false }));
-    } else if (rounds > pans) {
-      setoptimizationReport(() => ({ ...optimizationReport, pans: true, rounds: false }));
-    } else if (pans === rounds && pans !== 0 && rounds !== 0) {
-      setoptimizationReport(() => ({ ...optimizationReport, pans: true, rounds: false }));
-    }
   };
 
   
